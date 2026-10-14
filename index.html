@@ -41,7 +41,7 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 #hq:before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px;background:repeating-linear-gradient(90deg,#7a5c84 0 24px,#5b4363 24px 28px)}
 #hq:after{content:"";position:absolute;left:0;right:0;bottom:0;height:22px;background:repeating-linear-gradient(90deg,#2a2233 0 32px,#211a29 32px 64px)}
 .bay,#detail,#night,.tb button,#gate>div.box,#ticker{border:4px solid #0b0b14!important;border-radius:0!important;box-shadow:inset -4px -4px 0 #0005,inset 4px 4px 0 #fff2,4px 4px 0 #0008}
-.bay,#detail,#night{background-color:#262a45!important}@media (max-width:600px){body{font-size:9px}h1{font-size:13px}.lbl,.st{font-size:8px}.tb button{font-size:9px;padding:5px 6px}}.idle .zzz{font-family:PS2P;font-size:3px}
+.bay,#detail,#night{background-color:#262a45!important}@media (max-width:600px){body{font-size:9px}h1{font-size:13px}.lbl,.st{font-size:8px}.tb button{font-size:9px;padding:5px 6px}}
 .bay{position:relative;transition:transform .15s;font-family:inherit}
 .bay:hover,.bay.sel{transform:translateY(-4px)}.bay:active{animation:boing .3s}
 @keyframes boing{30%{transform:translateY(-8px) scale(1.03)}60%{transform:translateY(0) scale(.98)}}
@@ -103,8 +103,8 @@ let D=null,sel=null;
 async function load(){try{const E=await fetchEnc();if(KEY.salt!==E.salt){await kput(null);location.reload();return}D=await decrypt(E,KEY.k);render()}catch(e){document.getElementById("gen").textContent="status unavailable ("+e.name+")"}}
 function stamp(){if(!D)return;const m=Math.floor((Date.now()/1e3-D.generated)/60),el=document.getElementById("gen");el.innerHTML=(m>15?'<b style="color:#fff;background:#c33;padding:1px 6px;border-radius:4px">⚠ STALE</b> ':"")+"Last updated "+(m<1?"just now":m+" min ago")+" ("+fmt(D.generated)+") · checks every 60s"}
 function render(){stamp();
- document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'">'+sprite(COL[b.id],b.id)+
- '<span class="lv">Lv '+(b.boost==null?"?":1+Math.floor(b.boost/20))+'</span><div class="bubble">'+esc(b.task||"no data")+'</div><div class="fx"><i></i><i></i><i></i></div><b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
+ document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'"><div class="spr">'+sprite(COL[b.id],b.id)+'<div class="fx"><i></i><i></i><i></i></div><span class="zz">Z<small>z</small><small>z</small></span></div>'+
+ '<span class="lv">Lv '+(b.boost==null?"?":1+Math.floor(b.boost/20))+'</span><div class="bubble">'+esc(b.task||"no data")+'</div><b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
  bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join("");
  document.querySelectorAll(".bay").forEach(e=>{if(e.dataset.id===sel)e.classList.add("sel");e.onclick=()=>{sel=e.dataset.id;document.querySelectorAll(".bay").forEach(x=>x.classList.toggle("sel",x===e));showDetail()}});ticker();sky();
  showDetail();renderNight()}
@@ -127,3 +127,11 @@ document.getElementById("lock").onclick=async()=>{await kput(null);location.relo
 document.getElementById("wallBtn").onclick=()=>{document.body.classList.toggle("wall");document.documentElement.requestFullscreen?.().catch(()=>{})};
 kget().then(v=>{if(v&&v.k){KEY=v;unlock()}}).catch(()=>{});
 </script></body></html>
+<style>.zzz{display:none!important}.spr{position:relative;overflow:hidden}
+.fx{top:0!important;height:100%!important;bottom:0}.fx i{bottom:10%!important}
+@keyframes spark{from{transform:translateY(0);opacity:1}to{transform:translateY(-70%);opacity:0}}
+.zz{display:none;position:absolute;right:8%;top:6%;font-size:20px;color:#9cf;text-shadow:2px 2px 0 #0b0b14;animation:zzf 2.4s ease-in-out infinite}
+.zz small{font-size:14px;margin-left:2px}.idle .zz{display:block}
+@keyframes zzf{0%,100%{transform:translateY(4px);opacity:.6}50%{transform:translateY(-6px);opacity:1}}
+@media (min-width:1600px){.zz{font-size:28px}.zz small{font-size:20px}}
+@media (prefers-reduced-motion:reduce){.zz{animation:none!important}}</style>
