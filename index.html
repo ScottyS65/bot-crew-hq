@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Bot Garage</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#1b1d2b;color:#eee;font:15px/1.4 monospace}
+#gate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#11121b}
+#gate input,#gate button{font:inherit;padding:10px;border-radius:6px;border:2px solid #555;background:#222;color:#fff}
+#app{display:none;padding:10px}header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+h1{font-size:20px;margin:4px 0;color:#ffd84a}button{cursor:pointer}
+.tb button{font:inherit;padding:6px 10px;background:#333;color:#fff;border:1px solid #666;border-radius:6px}
+#lot{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+.bay{background:repeating-linear-gradient(90deg,#2a2c3a 0 46%,#ffd84a 46% 50%,#2a2c3a 50%);background-size:100% 6px;background-repeat:no-repeat;background-position:bottom;background-color:#2a2c3a;border:2px solid #444;border-radius:8px;padding:8px;text-align:left;color:#eee;font:inherit}
+.bay svg{width:100%;height:auto;image-rendering:pixelated;display:block}
+.bay svg{max-height:140px}.zzz{display:none}.idle .zzz{display:block;animation:zz 2s infinite}.idle .bod{opacity:.85}.working .bod{animation:bob .4s infinite alternate}.working .legA{animation:leg .4s infinite alternate}.working .legB{animation:leg .4s infinite alternate-reverse}@keyframes leg{to{transform:translateY(-1px)}}@keyframes zz{0%{opacity:0;transform:translateY(2px)}50%{opacity:1}100%{opacity:0;transform:translateY(-3px)}}
+@keyframes bob{to{transform:translateY(-1px)}}
+
+.bar{height:8px;background:#111;border-radius:4px;margin:3px 0}.bar i{display:block;height:100%;border-radius:4px}
+.lbl{font-size:12px;opacity:.85}.st{font-size:12px;padding:1px 6px;border-radius:4px;background:#444}.st.working{background:#2a8}
+#detail,#night{background:#232536;border:2px solid #555;border-radius:8px;padding:10px;margin-top:10px}
+#detail{display:none}#night{display:none}ul{padding-left:18px;margin:4px 0}
+/* desktop / wall */
+@media (min-width:1600px){body{font-size:18px}.bay svg{max-height:340px}.bay{padding:14px}#lot{grid-template-columns:repeat(4,1fr);gap:18px}h1{font-size:30px}
+ #main{display:grid;grid-template-columns:2fr 1fr;gap:18px}#detail,#night{display:block}.lbl,.st{font-size:15px}}
+body.wall{overflow:hidden;height:100vh}body.wall #app{height:100vh;display:flex;flex-direction:column}
+body.wall #main{flex:1;min-height:0}body.wall #detail,body.wall #night{overflow:hidden}
+</style></head><body>
+<div id="gate"><div style="font-size:40px">🔒</div><div>Bot Garage — enter passcode</div>
+<input id="pc" type="password" autocomplete="current-password" aria-label="passcode">
+<label><input type="checkbox" id="rem" checked> Remember on this browser</label>
+<button id="go">Unlock</button><div id="err" style="color:#f66"></div></div>
+<div id="app"><header><h1>🏠 Bot Crew HQ</h1><div class="tb">
+<button id="nsBtn">🌙 Night Shift</button> <button id="wallBtn">🖥 Wall mode</button> <button id="lock">Lock</button></div>
+<div class="lbl" id="gen" style="width:100%"></div></header>
+<div id="main"><div><div id="lot"></div></div><div><div id="detail"></div><div id="night"></div></div></div></div>
+<script>
+const COL={juniper:"#5ec26a",route:"#3d8bfd",markets:"#c9a227",clickcovered:"#e8553d"};
+function sprite(c,id){/* original 16x20 pixel character */
+ const R=(x,y,w,h,f,k)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"'+(k?' class="'+k+'"':'')+'/>';
+ let p=R(5,2,6,1,"#4a2f1b")+R(5,3,6,5,"#f1c27d")+R(6,5,1,1,"#222")+R(9,5,1,1,"#222")+R(7,7,2,1,"#c66")+R(4,8,8,7,c)+R(3,9,1,5,c)+R(12,9,1,5,c)+R(5,15,2,4,"#334","legA")+R(9,15,2,4,"#334","legB");
+ const acc={juniper:R(4,1,8,2,"#7a3b1e")+R(4,3,1,7,"#7a3b1e")+R(11,3,1,5,"#7a3b1e")+R(2,3,2,1,"#7a3b1e")+R(1,4,2,5,"#7a3b1e")+R(3,2,2,2,"#ff6fae")+R(5,3,1,1,"#7a3b1e")+R(10,3,1,1,"#7a3b1e")+R(6,6,1,1,"#f9a")+R(9,6,1,1,"#f9a")+R(4,8,8,7,"#2fb5a0")+R(7,8,2,1,"#fff")+R(3,13,10,2,"#2fb5a0")+R(3,14,10,1,"#1d8a7a")+R(11,9,4,4,"#8b5a2b")+R(10,8,1,1,"#5a3a1b")+R(9,9,1,1,"#5a3a1b")+R(13,4,1,5,"#555")+R(12,3,3,1,"#f44"),
+  route:R(4,2,8,2,"#223")+R(0,10,6,5,"#f3e6b0")+R(1,11,1,3,"#3d8bfd")+R(2,12,3,1,"#e33")+R(4,13,1,1,"#3d8bfd"),
+  markets:R(5,4,6,1,"#111")+R(11,8,5,7,"#fff")+R(12,13,1,1,"#2a8")+R(13,11,1,3,"#2a8")+R(14,9,1,5,"#2a8"),
+  clickcovered:R(7,8,2,4,"#fff")+R(7.5,9,1,3,"#336")+R(11,9,4,6,"#a5763b")+R(12,10,2,1,"#ddd")+R(12,12,2,1,"#ddd")};
+ return '<svg viewBox="-2 -4 22 24" shape-rendering="crispEdges"><g class="bod">'+p+(acc[id]||"")+'</g><text class="zzz" x="14" y="0" font-size="5" fill="#9cf">Zzz</text></svg>'}
+const ago=t=>{if(!t)return"no data";const m=Math.round((Date.now()/1e3-t)/60);return m<60?m+" min ago":m<1440?Math.round(m/60)+" h ago":Math.round(m/1440)+" d ago"};
+const fmt=t=>new Date(t*1e3).toLocaleString("en-US",{timeZone:"America/New_York",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const bar=(v,c,n)=>'<div class="lbl">'+n+': '+(v==null?"no data":v+"%")+'</div><div class="bar"><i style="width:'+(v||0)+'%;background:'+c+'"></i></div>';
+let KEY=null;
+const u8=b=>Uint8Array.from(atob(b),c=>c.charCodeAt(0));
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open("crewhq",1);r.onupgradeneeded=()=>r.result.createObjectStore("k");r.onsuccess=()=>res(r.result);r.onerror=rej})}
+async function kput(v){const d=await idb();return new Promise(r=>{const t=d.transaction("k","readwrite");v?t.objectStore("k").put(v,"key"):t.objectStore("k").delete("key");t.oncomplete=r})}
+async function kget(){const d=await idb();return new Promise(r=>{const q=d.transaction("k").objectStore("k").get("key");q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}
+async function fetchEnc(){const r=await fetch("status.enc.json?"+Date.now(),{cache:"no-store"});return r.json()}
+async function derive(pc,E){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pc),"PBKDF2",false,["deriveKey"]);
+ return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt:u8(E.salt),iterations:E.iter},base,{name:"AES-GCM",length:256},false,["decrypt"])}
+async function decrypt(E,k){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:u8(E.iv)},k,u8(E.ct));return JSON.parse(new TextDecoder().decode(pt))}
+let D=null,sel=null;
+async function load(){try{const E=await fetchEnc();if(KEY.salt!==E.salt){await kput(null);location.reload();return}D=await decrypt(E,KEY.k);render()}catch(e){document.getElementById("gen").textContent="status unavailable ("+e.name+")"}}
+function render(){document.getElementById("gen").textContent="Status generated "+fmt(D.generated)+" · auto-refresh 60s";
+ document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'">'+sprite(COL[b.id],b.id)+
+ '<b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
+ bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join("");
+ document.querySelectorAll(".bay").forEach(e=>e.onclick=()=>{sel=e.dataset.id;showDetail()});
+ showDetail();renderNight()}
+function showDetail(){const el=document.getElementById("detail");const b=D.bots.find(x=>x.id===(sel||D.bots[0].id));if(!sel&&innerWidth<1600){return}
+ el.style.display="block";el.innerHTML='<h2 style="margin:0;color:'+COL[b.id]+'">'+esc(b.name)+'</h2><div class="lbl">'+esc(b.role)+'</div>'+
+ '<p><b>Current task:</b> '+esc(b.task||"no data")+'</p><p><b>Schedule / routines:</b> '+esc(b.schedule||"no data")+'</p>'+
+ '<b>Recent wins (note headings, last 7 days):</b>'+(b.wins.length?'<ul>'+b.wins.map(w=>'<li>'+esc(w.t)+' <span class="lbl">('+fmt(w.at)+')</span></li>').join("")+'</ul>':'<p>no data</p>')+
+ '<div class="lbl">Sources: '+(b.sources.length?esc(b.sources.join(", ")):"none found")+'</div>';if(sel&&innerWidth<1600)el.scrollIntoView({behavior:"smooth"})}
+function renderNight(){const n=D.night,el=document.getElementById("night");
+ el.innerHTML='<h2 style="margin:0">🌙 Night Shift</h2><div class="lbl">'+fmt(n.window[0])+' → '+fmt(n.window[1])+'</div>'+(n.items.length?'<ul>'+n.items.map(i=>'<li><b>'+esc(i.bot)+'</b> '+fmt(i.at)+': '+esc(i.what)+'</li>').join("")+'</ul>':'<p>no data — no overnight activity found</p>')}
+document.getElementById("nsBtn").onclick=()=>{const el=document.getElementById("night");el.style.display="block";el.scrollIntoView({behavior:"smooth"})};
+function unlock(){document.getElementById("gate").style.display="none";document.getElementById("app").style.display="block";if(/wall/.test(location.search+location.hash))document.body.classList.add("wall");load();setInterval(load,60000);setTimeout(()=>location.reload(),6*3600e3)}
+document.getElementById("go").onclick=async()=>{const err=document.getElementById("err");err.textContent="Checking…";try{const E=await fetchEnc();const k=await derive(document.getElementById("pc").value,E);D=await decrypt(E,k);KEY={k,salt:E.salt};if(document.getElementById("rem").checked)await kput(KEY);err.textContent="";unlock()}catch(e){err.textContent="Wrong passcode"}};
+document.getElementById("pc").onkeydown=e=>{if(e.key==="Enter")document.getElementById("go").click()};
+document.getElementById("lock").onclick=async()=>{await kput(null);location.reload()};
+document.getElementById("wallBtn").onclick=()=>{document.body.classList.toggle("wall");document.documentElement.requestFullscreen?.().catch(()=>{})};
+kget().then(v=>{if(v&&v.k){KEY=v;unlock()}}).catch(()=>{});
+</script></body></html>
