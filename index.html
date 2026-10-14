@@ -57,7 +57,8 @@ async function derive(pc,E){const base=await crypto.subtle.importKey("raw",new T
 async function decrypt(E,k){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:u8(E.iv)},k,u8(E.ct));return JSON.parse(new TextDecoder().decode(pt))}
 let D=null,sel=null;
 async function load(){try{const E=await fetchEnc();if(KEY.salt!==E.salt){await kput(null);location.reload();return}D=await decrypt(E,KEY.k);render()}catch(e){document.getElementById("gen").textContent="status unavailable ("+e.name+")"}}
-function render(){document.getElementById("gen").textContent="Status generated "+fmt(D.generated)+" · auto-refresh 60s";
+function stamp(){if(!D)return;const m=Math.floor((Date.now()/1e3-D.generated)/60),el=document.getElementById("gen");el.innerHTML=(m>15?'<b style="color:#fff;background:#c33;padding:1px 6px;border-radius:4px">⚠ STALE</b> ':"")+"Last updated "+(m<1?"just now":m+" min ago")+" ("+fmt(D.generated)+") · checks every 60s"}
+function render(){stamp();
  document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'">'+sprite(COL[b.id],b.id)+
  '<b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
  bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join("");
@@ -71,7 +72,7 @@ function showDetail(){const el=document.getElementById("detail");const b=D.bots.
 function renderNight(){const n=D.night,el=document.getElementById("night");
  el.innerHTML='<h2 style="margin:0">🌙 Night Shift</h2><div class="lbl">'+fmt(n.window[0])+' → '+fmt(n.window[1])+'</div>'+(n.items.length?'<ul>'+n.items.map(i=>'<li><b>'+esc(i.bot)+'</b> '+fmt(i.at)+': '+esc(i.what)+'</li>').join("")+'</ul>':'<p>no data — no overnight activity found</p>')}
 document.getElementById("nsBtn").onclick=()=>{const el=document.getElementById("night");el.style.display="block";el.scrollIntoView({behavior:"smooth"})};
-function unlock(){document.getElementById("gate").style.display="none";document.getElementById("app").style.display="block";if(/wall/.test(location.search+location.hash))document.body.classList.add("wall");load();setInterval(load,60000);setTimeout(()=>location.reload(),6*3600e3)}
+function unlock(){document.getElementById("gate").style.display="none";document.getElementById("app").style.display="block";if(/wall/.test(location.search+location.hash))document.body.classList.add("wall");load();setInterval(load,60000);setInterval(stamp,15000);setTimeout(()=>location.reload(),6*3600e3)}
 document.getElementById("go").onclick=async()=>{const err=document.getElementById("err");err.textContent="Checking…";try{const E=await fetchEnc();const k=await derive(document.getElementById("pc").value,E);D=await decrypt(E,k);KEY={k,salt:E.salt};if(document.getElementById("rem").checked)await kput(KEY);err.textContent="";unlock()}catch(e){err.textContent="Wrong passcode"}};
 document.getElementById("pc").onkeydown=e=>{if(e.key==="Enter")document.getElementById("go").click()};
 document.getElementById("lock").onclick=async()=>{await kput(null);location.reload()};
