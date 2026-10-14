@@ -74,7 +74,31 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 <div id="app"><header><h1>🏠 Bot Crew HQ</h1><div class="tb">
 <button id="nsBtn">🌙 Night Shift</button> <button id="wallBtn">🖥 Wall mode</button> <button id="lock">Lock</button></div>
 <div class="lbl" id="gen" style="width:100%"></div></header>
-<div id="main"><div><div id="lot"></div></div><div><div id="detail"></div><div id="night"></div></div></div><div id="ticker"><span id="tk">loading…</span></div></div>
+<div id="main"><div><div id="lot"></div></div><div><div id="detail"></div><div id="night"></div></div></div><div id="ticker"><span id="tk">loading…</span></div><div id="yard"><svg id="car" viewBox="0 0 66 22" shape-rendering="crispEdges" role="img" aria-label="Scotty's bagged supercharged E92 M3, pixel art">
+<g class="puff"><rect x="63" y="14" width="2" height="2" fill="#ccd"/><rect x="64" y="12" width="3" height="3" fill="#aab"/></g>
+<rect x="64" y="15" width="1" height="1" fill="#888"/>
+<!-- body -->
+<rect x="3" y="10" width="58" height="5" fill="#5a0f22"/><rect x="1" y="11" width="3" height="5" fill="#5a0f22"/><rect x="60" y="9" width="3" height="6" fill="#5a0f22"/>
+<rect x="4" y="9" width="19" height="1" fill="#6e1630"/><rect x="9" y="8" width="10" height="1" fill="#7a1c37"/>
+<rect x="50" y="8" width="11" height="1" fill="#6e1630"/><rect x="58" y="7" width="5" height="1" fill="#111"/>
+<!-- greenhouse -->
+<polygon points="23,9 29,3 45,3 52,8 52,9" fill="#5a0f22"/><polygon points="24,9 29.5,4 37,4 37,9" fill="#141019"/><polygon points="38.5,4 44.5,4 50.5,9 38.5,9" fill="#141019"/>
+<rect x="27" y="5" width="2" height="1" fill="#3a3550"/>
+<!-- shading, shine -->
+<rect x="3" y="14" width="58" height="1" fill="#330812"/><rect x="5" y="11" width="54" height="1" fill="#8a2440"/>
+<rect class="shine" x="5" y="11" width="6" height="1" fill="#e48aa2"/>
+<rect x="21" y="12" width="2" height="1" fill="#c9c9d6"/><rect x="40" y="11" width="2" height="1" fill="#2a0610"/>
+<!-- lights, intake, skirt -->
+<rect x="1" y="11" width="3" height="1" fill="#e9fbff"/><rect x="2" y="11" width="1" height="1" fill="#7ff"/><rect x="1" y="14" width="5" height="2" fill="#111"/>
+<rect x="60" y="10" width="3" height="1" fill="#e22"/><rect x="19" y="15" width="25" height="1" fill="#111"/><rect x="58" y="15" width="5" height="1" fill="#111"/>
+<!-- wheels: tucked, stretched tires, polished multi-spoke -->
+<g class="wh"><circle cx="13" cy="15" r="5" fill="#0d0d10"/><circle cx="13" cy="15" r="4.2" fill="#d8dbe2"/><circle cx="13" cy="15" r="3.4" fill="#8d93a0"/>
+<path d="M13 11.6v6.8M9.6 15h6.8M10.6 12.6l4.8 4.8M15.4 12.6l-4.8 4.8" stroke="#eef" stroke-width=".6"/><circle cx="13" cy="15" r="1" fill="#555"/></g>
+<g class="wh"><circle cx="51" cy="15" r="5" fill="#0d0d10"/><circle cx="51" cy="15" r="4.2" fill="#d8dbe2"/><circle cx="51" cy="15" r="3.4" fill="#8d93a0"/>
+<path d="M51 11.6v6.8M47.6 15h6.8M48.6 12.6l4.8 4.8M53.4 12.6l-4.8 4.8" stroke="#eef" stroke-width=".6"/><circle cx="51" cy="15" r="1" fill="#555"/></g>
+<rect x="7" y="10" width="12" height="1" fill="#3a0a17"/><rect x="45" y="10" width="12" height="1" fill="#3a0a17"/>
+<rect x="0" y="20" width="66" height="1" fill="#0006"/>
+</svg><div id="clock" aria-label="Eastern time">--:--:--</div></div></div>
 <script>
 const COL={juniper:"#5ec26a",route:"#3d8bfd",markets:"#c9a227",clickcovered:"#e8553d",business:"#2d3a6b"};
 function sprite(c,id){/* original 16x20 pixel character */
@@ -106,12 +130,13 @@ function render(){stamp();
  document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'"><div class="spr">'+sprite(COL[b.id],b.id)+'<div class="fx"><i></i><i></i><i></i></div><span class="zz">Z<small>z</small><small>z</small></span></div>'+
  '<span class="lv">Lv '+(b.boost==null?"?":1+Math.floor(b.boost/20))+'</span><div class="bubble">'+esc(b.task||"no data")+'</div><b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
  bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join("");
- document.querySelectorAll(".bay").forEach(e=>{if(e.dataset.id===sel)e.classList.add("sel");e.onclick=()=>{sel=e.dataset.id;document.querySelectorAll(".bay").forEach(x=>x.classList.toggle("sel",x===e));showDetail()}});ticker();sky();
+ document.querySelectorAll(".bay").forEach(e=>{if(e.dataset.id===sel)e.classList.add("sel");e.onclick=()=>{sel=e.dataset.id;document.querySelectorAll(".bay").forEach(x=>x.classList.toggle("sel",x===e));showDetail()}});ticker();sky();document.body.classList.toggle("anywork",D.bots.some(b=>b.status==="working"));
  showDetail();renderNight()}
 function ticker(){const w=D.bots.flatMap(b=>b.wins.slice(0,3).map(x=>"★ "+b.name+": "+x.t));document.getElementById("tk").textContent=w.length?w.join("   "):"no data — no recent wins"}
 function sky(){const h=+new Date().toLocaleString("en-US",{timeZone:"America/New_York",hour:"numeric",hour12:false})%24;const sc=document.getElementById("scene");sc.className=(h>=20||h<6)?"night":(h>=18||h<8)?"dusk":"day";
  const st=document.getElementById("stars");if(!st.children.length)for(let i=0;i<40;i++){const e=document.createElement("i");e.style.left=Math.random()*100+"%";e.style.top=Math.random()*100+"%";e.style.animationDelay=Math.random()*3+"s";st.appendChild(e)}}
 sky();
+function tickClock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-US",{timeZone:"America/New_York",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true})+" ET"}tickClock();setInterval(tickClock,1000);
 function showDetail(){const el=document.getElementById("detail");const b=D.bots.find(x=>x.id===(sel||D.bots[0].id));if(!sel&&innerWidth<1600){return}
  el.style.display="block";el.innerHTML='<h2 style="margin:0;color:'+COL[b.id]+'">'+esc(b.name)+'</h2><div class="lbl">'+esc(b.role)+'</div>'+
  '<p><b>Current task:</b> '+esc(b.task||"no data")+'</p><p><b>Schedule / routines:</b> '+esc(b.schedule||"no data")+'</p>'+
@@ -134,4 +159,13 @@ kget().then(v=>{if(v&&v.k){KEY=v;unlock()}}).catch(()=>{});
 .zz small{font-size:14px;margin-left:2px}.idle .zz{display:block}
 @keyframes zzf{0%,100%{transform:translateY(4px);opacity:.6}50%{transform:translateY(-6px);opacity:1}}
 @media (min-width:1600px){.zz{font-size:28px}.zz small{font-size:20px}}
-@media (prefers-reduced-motion:reduce){.zz{animation:none!important}}</style>
+@media (prefers-reduced-motion:reduce){.zz{animation:none!important}}</style><style>
+#yard{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:12px}
+#car{width:60%;max-width:300px;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #0007)}
+#clock{font-family:PS2P,monospace;font-size:12px;color:#7fffa0;background:#0b0b14;border:4px solid #0b0b14;box-shadow:inset 0 0 0 2px #2f6,4px 4px 0 #0008;padding:8px 10px;text-shadow:0 0 6px #3f9;white-space:nowrap}
+.shine{animation:shine 6s ease-in-out infinite}@keyframes shine{0%,100%{transform:translateX(0);opacity:.2}50%{transform:translateX(46px);opacity:.9}}
+.puff{display:none}body.anywork .puff{display:block;animation:puff 2.8s ease-out infinite}
+@keyframes puff{0%{opacity:0;transform:translate(0,0)}20%{opacity:.8}100%{opacity:0;transform:translate(4px,-4px)}}
+@media (min-width:1600px){#yard{position:fixed;left:24px;right:24px;bottom:26px;margin:0;pointer-events:none}#car{width:560px;max-width:none}#clock{font-size:26px;padding:14px 18px}}
+@media (prefers-reduced-motion:reduce){.shine,.puff{animation:none!important}}
+</style>
