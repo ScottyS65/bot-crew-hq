@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html><html lang="en"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>Bot Crew HQ</title>
 <style>
@@ -66,23 +66,39 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 @media (min-width:1600px){body{font-size:12px}h1{font-size:24px}.lbl,.st{font-size:11px}h2{font-size:16px}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.fx{display:none!important}#ticker span{padding-left:0;white-space:normal}}
 </style><style id="fix6">
-/* car always fixed on the ground; content reserves room for it */
+/* v3: car+clock live in a reserved bottom strip; cards fit to screen */
 :root{--carw:min(60vw,300px)}
-@media (min-width:1000px){:root{--carw:clamp(320px,31vw,600px)}}
-#yard{position:fixed!important;left:16px;right:16px;bottom:22px;margin:0!important;pointer-events:none;z-index:1}
+#yard{position:fixed!important;left:12px;right:12px;bottom:14px;margin:0!important;pointer-events:none;z-index:1}
 #carwrap{width:var(--carw)!important;max-width:none!important}
-#app{padding-bottom:calc(var(--carw)*0.3 + 40px)}
-@media (max-width:999px){#clock{font-size:11px;padding:6px 8px}}
-/* wall: everything on one screen, 3x2 grid sized to the space left */
-body.wall,body.wall #app{height:100vh;overflow:hidden}body.wall #app[style*="block"]{display:flex!important;flex-direction:column}
-body.wall #main{display:grid!important;grid-template-columns:2fr 1fr;gap:14px;flex:1;min-height:0}
+#app{padding-bottom:calc(var(--carw)*0.3 + 30px)}
+@media (max-width:899px){#clock{font-size:11px;padding:6px 8px}}
+@media (min-width:900px){:root{--carw:clamp(200px,min(31vw,55vh),600px)}#clock{font-size:clamp(12px,2.6vh,26px)!important;padding:clamp(5px,1.2vh,14px) clamp(8px,1.6vh,18px)!important}}
+body.wall{height:100vh;overflow:hidden}
+body.wall #app{height:100vh;overflow:hidden;display:flex!important;flex-direction:column;padding:6px 10px calc(var(--carw)*0.3 + 30px)}
+body.wall header h1{margin:0}
+body.wall #main{display:grid!important;grid-template-columns:2fr 1fr;gap:10px;flex:1;min-height:0}
 body.wall #main>div{min-height:0;overflow:hidden}
-body.wall #detail,body.wall #night{display:block}
-body.wall #lot{grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(2,minmax(0,1fr));height:100%;margin-top:6px;gap:10px}
-body.wall .bay{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:6px 10px}
-body.wall .bay .spr{flex:1 1 0;min-height:40px;position:relative}
+body.wall #detail{display:block;margin-top:6px}body.wall #night{display:block}
+body.wall #lot{grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(2,minmax(0,1fr));height:100%;margin-top:6px;gap:8px}
+body.wall .bay{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:4px 8px}
+body.wall .bay .spr{flex:1 1 0;min-height:24px;position:relative}
 body.wall .bay svg{position:absolute;inset:0;width:100%;height:100%;max-height:none!important}
-@media (max-height:900px){body.wall .bay .bar{height:7px;margin:1px 0}body.wall .lbl,body.wall .st{font-size:9px}body.wall h1{font-size:18px}}
+body.wall #ticker{flex:none;margin-top:6px}
+@media (min-width:900px) and (min-height:500px){
+body{height:100vh;overflow:hidden}
+#app{height:100vh;overflow:hidden;display:flex!important;flex-direction:column;padding:6px 10px calc(var(--carw)*0.3 + 30px)}
+header h1{margin:0}
+#main{display:grid!important;grid-template-columns:2fr 1fr;gap:10px;flex:1;min-height:0}
+#main>div{min-height:0;overflow:hidden}
+#detail{display:block;margin-top:6px}#night{display:block}
+#lot{grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(2,minmax(0,1fr));height:100%;margin-top:6px;gap:8px}
+.bay{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:4px 8px}
+.bay .spr{flex:1 1 0;min-height:24px;position:relative}
+.bay svg{position:absolute;inset:0;width:100%;height:100%;max-height:none!important}
+#ticker{flex:none;margin-top:6px}
+}
+@media (min-width:900px) and (max-height:800px){body .bay .bar{height:6px;margin:1px 0;border-width:1px}body .lbl,body .st,.bay{font-size:9px!important;line-height:1.35}h1{font-size:16px!important}.lv{font-size:7px;padding:1px 3px;top:3px;left:3px}#detail,#night{font-size:9px;padding:6px}#ticker{padding:3px 0}.tb button{padding:3px 6px}}
+@media (min-width:900px) and (max-height:620px){.bay .lbl:not(:has(+.bar)){display:none}}
 </style></head><body>
 <div id="scene"><div id="stars"></div><div id="sun"></div><div class="cloud" style="top:8%"></div><div class="cloud b" style="top:18%;animation-delay:-80s"></div><div class="cloud" style="top:28%;animation-delay:-50s"></div><div id="hq"></div></div>
 <div id="gate"><div style="font-size:40px">🔒</div><div>Bot Garage — enter passcode</div>
