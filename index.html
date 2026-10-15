@@ -74,14 +74,14 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 #app{padding-bottom:calc(var(--carw)*0.3 + 40px)}
 @media (max-width:999px){#clock{font-size:11px;padding:6px 8px}}
 /* wall: everything on one screen, 3x2 grid sized to the space left */
-body.wall,body.wall #app{height:100vh;overflow:hidden}
+body.wall,body.wall #app{height:100vh;overflow:hidden}body.wall #app[style*="block"]{display:flex!important;flex-direction:column}
 body.wall #main{display:grid!important;grid-template-columns:2fr 1fr;gap:14px;flex:1;min-height:0}
 body.wall #main>div{min-height:0;overflow:hidden}
 body.wall #detail,body.wall #night{display:block}
 body.wall #lot{grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(2,minmax(0,1fr));height:100%;margin-top:6px;gap:10px}
 body.wall .bay{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:6px 10px}
-body.wall .bay .spr{flex:1;min-height:0;display:flex;justify-content:center}
-body.wall .bay svg{max-height:100%!important;height:100%;width:auto}
+body.wall .bay .spr{flex:1 1 0;min-height:40px;position:relative}
+body.wall .bay svg{position:absolute;inset:0;width:100%;height:100%;max-height:none!important}
 @media (max-height:900px){body.wall .bay .bar{height:7px;margin:1px 0}body.wall .lbl,body.wall .st{font-size:9px}body.wall h1{font-size:18px}}
 </style></head><body>
 <div id="scene"><div id="stars"></div><div id="sun"></div><div class="cloud" style="top:8%"></div><div class="cloud b" style="top:18%;animation-delay:-80s"></div><div class="cloud" style="top:28%;animation-delay:-50s"></div><div id="hq"></div></div>
