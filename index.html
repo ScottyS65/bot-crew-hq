@@ -31,7 +31,7 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 #scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(#5aa9e6,#9fd3f5 60%)}
 #scene.dusk{background:linear-gradient(#3b2a6b,#e9845e 60%)}#scene.night{background:linear-gradient(#060818,#1b1f4a 60%)}
 #stars{position:absolute;inset:0 0 40% 0;display:none}.night #stars,.dusk #stars{display:block}
-#stars i{position:absolute;left:0;top:0;width:3px;height:3px;animation:tw 3s steps(2) infinite;will-change:opacity}
+#stars i{position:absolute;left:0;top:0;width:3px;height:3px;animation:tw 3s steps(2) infinite}
 @keyframes tw{50%{opacity:.2}}
 .cloud{position:absolute;left:0;height:14px;background:#fff;opacity:.85;box-shadow:12px -8px 0 #fff,26px 0 0 #fff;width:40px;animation:drift 120s linear infinite;will-change:transform}
 .cloud.b{opacity:.5;scale:.6;animation-duration:200s}.night .cloud{opacity:.15}
@@ -157,8 +157,8 @@ function render(){stamp();
  showDetail();renderJoint();renderNight()}
 function ticker(){const w=D.bots.flatMap(b=>b.wins.slice(0,3).map(x=>"★ "+b.name+": "+x.t)),el=document.getElementById("tk"),t=w.length?w.join("   "):"no data — no recent wins";if(el.textContent!==t)el.textContent=t}
 function sky(){const h=+new Date().toLocaleString("en-US",{timeZone:"America/New_York",hour:"numeric",hour12:false})%24;const sc=document.getElementById("scene");const c=(h>=20||h<6)?"night":(h>=18||h<8)?"dusk":"day";if(sc.className!==c)sc.className=c;
- const st=document.getElementById("stars");if(!st.children.length){const G=6,sh=Array.from({length:G},()=>[]);for(let i=0;i<40;i++)sh[i%G].push((Math.random()*100).toFixed(2)+"vw "+(Math.random()*60).toFixed(2)+"vh 0 #fff");
-  sh.forEach((s,g)=>{const e=document.createElement("i");e.style.boxShadow=s.join(",");e.style.animationDelay=(g*3/G).toFixed(2)+"s";st.appendChild(e)})}}
+ const st=document.getElementById("stars");if(!st.children.length){const G=6;/* one tiny 3px element per star (was 6 full-viewport box-shadow layers): same look, ~1/50 the composited area */
+  for(let i=0;i<40;i++){const e=document.createElement("i");e.style.cssText="left:"+(Math.random()*100).toFixed(2)+"vw;top:"+(Math.random()*60).toFixed(2)+"vh;background:#fff;animation-delay:"+((i%G)*3/G).toFixed(2)+"s";st.appendChild(e)}}}
 sky();
 const CLK=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
 function tickClock(){document.getElementById("clock").textContent=CLK.format(new Date())+" ET"}tickClock();
@@ -188,6 +188,16 @@ document.getElementById("pc").onkeydown=e=>{if(e.key==="Enter")document.getEleme
 document.getElementById("lock").onclick=async()=>{await kput(null);location.reload()};
 document.getElementById("wallBtn").onclick=()=>{document.body.classList.toggle("wall");document.documentElement.requestFullscreen?.().catch(()=>{})};
 kget().then(v=>{if(v&&v.k){KEY=v;unlock()}}).catch(()=>{});
+</script><script>/* low-fps animation driver: same CSS keyframes, sampled at ~12fps instead of 60 (cuts compositor/GPU frames ~4x); pauses when tab hidden or window unfocused (except wall mode) */
+(function(){if(!document.getAnimations||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+var FPS=12,run=null,st=null,M=new WeakMap();
+var L=[],last=0;
+function scan(now){L=[];var A=document.getAnimations();for(var i=0;i<A.length;i++){var a=A[i];if(!(a instanceof CSSAnimation))continue;var t=a.effect&&a.effect.getTiming();if(!t||t.iterations!==Infinity)continue;var s=M.get(a);if(s===undefined){s=now-(a.currentTime||0);M.set(a,s);a.pause()}L.push(a)}last=now}
+function tick(){var now=performance.now();if(now-last>1000)scan(now);for(var i=0;i<L.length;i++)L[i].currentTime=now-M.get(L[i])}
+function on(){var w=document.body.classList.contains("wall");return !document.hidden&&(w||document.hasFocus())}
+function upd(){var o=on();if(o===st&&run)return;st=o;clearInterval(run);if(o){tick();run=setInterval(tick,1000/FPS)}else{scan(performance.now());run=setInterval(function(){scan(performance.now())},2000)}}
+document.addEventListener("visibilitychange",upd);addEventListener("focus",upd);addEventListener("blur",upd);
+new MutationObserver(upd).observe(document.body,{attributes:true,attributeFilter:["class"]});upd()})();
 </script></body></html>
 <style>.zzz{display:none!important}.spr{position:relative;overflow:hidden}
 .fx{top:0!important;height:100%!important;bottom:0}.fx i{bottom:10%!important}
