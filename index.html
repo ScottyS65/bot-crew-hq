@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Bot Crew HQ</title>
+<meta name="robots" content="noindex,nofollow"><link rel="icon" href="data:,"><title>Bot Crew HQ</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#1b1d2b;color:#eee;font:15px/1.4 monospace}
 #gate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#11121b}
@@ -11,7 +11,7 @@ h1{font-size:20px;margin:4px 0;color:#ffd84a}button{cursor:pointer}
 #lot{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
 .bay{background:repeating-linear-gradient(90deg,#2a2c3a 0 46%,#ffd84a 46% 50%,#2a2c3a 50%);background-size:100% 6px;background-repeat:no-repeat;background-position:bottom;background-color:#2a2c3a;border:2px solid #444;border-radius:8px;padding:8px;text-align:left;color:#eee;font:inherit}
 .bay svg{width:100%;height:auto;image-rendering:pixelated;display:block}
-.bay svg{max-height:140px}.zzz{display:none}.idle .zzz{display:block;animation:zz 2s infinite}.idle .bod{opacity:.85}.working .bod{animation:bob .4s infinite alternate}.working .legA{animation:leg .4s infinite alternate}.working .legB{animation:leg .4s infinite alternate-reverse}@keyframes leg{to{transform:translateY(-1px)}}@keyframes zz{0%{opacity:0;transform:translateY(2px)}50%{opacity:1}100%{opacity:0;transform:translateY(-3px)}}
+.bay svg{max-height:140px}.zzz{display:none}.idle .zzz{display:block;animation:zz 2s infinite}.idle .bod{opacity:.85}.working .bod{animation:bob .4s steps(3,jump-none) infinite alternate}.working .legA{animation:leg .4s steps(3,jump-none) infinite alternate}.working .legB{animation:leg .4s steps(3,jump-none) infinite alternate-reverse}@keyframes leg{to{transform:translateY(-1px)}}@keyframes zz{0%{opacity:0;transform:translateY(2px)}50%{opacity:1}100%{opacity:0;transform:translateY(-3px)}}
 @keyframes bob{to{transform:translateY(-1px)}}
 
 .bar{height:8px;background:#111;border-radius:4px;margin:3px 0}.bar i{display:block;height:100%;border-radius:4px}
@@ -31,11 +31,11 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 #scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(#5aa9e6,#9fd3f5 60%)}
 #scene.dusk{background:linear-gradient(#3b2a6b,#e9845e 60%)}#scene.night{background:linear-gradient(#060818,#1b1f4a 60%)}
 #stars{position:absolute;inset:0 0 40% 0;display:none}.night #stars,.dusk #stars{display:block}
-#stars i{position:absolute;width:3px;height:3px;background:#fff;animation:tw 3s steps(2) infinite}
+#stars i{position:absolute;left:0;top:0;width:3px;height:3px;animation:tw 3s steps(2) infinite;will-change:opacity}
 @keyframes tw{50%{opacity:.2}}
-.cloud{position:absolute;height:14px;background:#fff;opacity:.85;box-shadow:12px -8px 0 #fff,26px 0 0 #fff;width:40px;animation:drift 120s linear infinite}
-.cloud.b{opacity:.5;transform:scale(.6);animation-duration:200s}.night .cloud{opacity:.15}
-@keyframes drift{from{left:-120px}to{left:110%}}
+.cloud{position:absolute;left:0;height:14px;background:#fff;opacity:.85;box-shadow:12px -8px 0 #fff,26px 0 0 #fff;width:40px;animation:drift 120s linear infinite;will-change:transform}
+.cloud.b{opacity:.5;scale:.6;animation-duration:200s}.night .cloud{opacity:.15}
+@keyframes drift{from{transform:translateX(-120px)}to{transform:translateX(110vw)}}
 #sun{position:absolute;right:12%;top:8%;width:40px;height:40px;background:#ffe066;box-shadow:0 0 0 6px #ffe06655}.night #sun{background:#e8e8ff;box-shadow:-10px 0 0 0 #1b1f4a inset}
 #hq{position:absolute;left:0;right:0;bottom:0;height:40%;background:repeating-linear-gradient(0deg,#4a3b52 0 14px,#3a2d40 14px 16px),#4a3b52}
 #hq:before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px;background:repeating-linear-gradient(90deg,#7a5c84 0 24px,#5b4363 24px 28px)}
@@ -45,8 +45,8 @@ h1{font-size:16px;text-shadow:3px 3px 0 #b5462b}h2{font-size:13px}
 .bay{position:relative;transition:transform .15s;font-family:inherit}
 .bay:hover,.bay.sel{transform:translateY(-4px)}.bay:active{animation:boing .3s}
 @keyframes boing{30%{transform:translateY(-8px) scale(1.03)}60%{transform:translateY(0) scale(.98)}}
-.st.working{background:#1fbf7a;color:#032;box-shadow:0 0 8px #3f9,0 0 2px #fff;animation:glow 1.2s ease-in-out infinite alternate}
-@keyframes glow{to{box-shadow:0 0 16px #3f9,0 0 4px #fff}}
+.st.working{position:relative;background:#1fbf7a;color:#032;box-shadow:0 0 8px #3f9,0 0 2px #fff}.st.working:after{content:"";position:absolute;inset:0;box-shadow:0 0 16px #3f9,0 0 4px #fff;opacity:0;pointer-events:none;animation:glow 1.2s ease-in-out infinite alternate;will-change:opacity}
+@keyframes glow{to{opacity:1}}
 .st{border-radius:0!important}
 .lv{position:absolute;top:6px;left:6px;background:#ffd84a;color:#3a2600;padding:2px 4px;font-size:9px;border:2px solid #0b0b14}
 .bubble{display:none;position:absolute;top:18px;left:50%;transform:translateX(-50%);width:90%;background:#fff;color:#111;padding:6px;font-size:9px;border:3px solid #0b0b14;z-index:3}
@@ -139,39 +139,51 @@ const u8=b=>Uint8Array.from(atob(b),c=>c.charCodeAt(0));
 function idb(){return new Promise((res,rej)=>{const r=indexedDB.open("crewhq",1);r.onupgradeneeded=()=>r.result.createObjectStore("k");r.onsuccess=()=>res(r.result);r.onerror=rej})}
 async function kput(v){const d=await idb();return new Promise(r=>{const t=d.transaction("k","readwrite");v?t.objectStore("k").put(v,"key"):t.objectStore("k").delete("key");t.oncomplete=r})}
 async function kget(){const d=await idb();return new Promise(r=>{const q=d.transaction("k").objectStore("k").get("key");q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}
-async function fetchEnc(){const r=await fetch("status.enc.json?"+Date.now(),{cache:"no-store"});return r.json()}
+let ETAG=null,LASTCT=null,LASTFETCH=0;
+async function fetchEnc(cond){const r=await fetch("status.enc.json?"+Date.now(),{cache:"no-store",headers:cond&&ETAG?{"If-None-Match":ETAG}:{}});LASTFETCH=Date.now();if(r.status===304)return null;if(!r.ok)throw new Error("HTTP "+r.status);ETAG=r.headers.get("ETag");return r.json()}
 async function derive(pc,E){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pc),"PBKDF2",false,["deriveKey"]);
  return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt:u8(E.salt),iterations:E.iter},base,{name:"AES-GCM",length:256},false,["decrypt"])}
 async function decrypt(E,k){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:u8(E.iv)},k,u8(E.ct));return JSON.parse(new TextDecoder().decode(pt))}
 let D=null,sel=null;
-async function load(){try{const E=await fetchEnc();if(KEY.salt!==E.salt){await kput(null);location.reload();return}D=await decrypt(E,KEY.k);render()}catch(e){document.getElementById("gen").textContent="status unavailable ("+e.name+")"}}
-function stamp(){if(!D)return;const m=Math.floor((Date.now()/1e3-D.generated)/60),el=document.getElementById("gen");el.innerHTML=(m>15?'<b style="color:#fff;background:#c33;padding:1px 6px;border-radius:4px">⚠ STALE</b> ':"")+"Last updated "+(m<1?"just now":m+" min ago")+" ("+fmt(D.generated)+") · checks every 60s"}
+let LOADING=false;
+async function load(){if(LOADING)return;LOADING=true;try{const E=await fetchEnc(!!D);if(!E||(D&&E.ct===LASTCT)){stamp();return}if(KEY.salt!==E.salt){await kput(null);location.reload();return}D=await decrypt(E,KEY.k);LASTCT=E.ct;render()}catch(e){const g=document.getElementById("gen");g._h=null;g.textContent="status unavailable ("+e.name+")"}finally{LOADING=false}}
+const put=(el,h)=>{if(el&&el._h!==h){el._h=h;el.innerHTML=h}};
+function stamp(){if(!D)return;const m=Math.floor((Date.now()/1e3-D.generated)/60),el=document.getElementById("gen");put(el,(m>15?'<b style="color:#fff;background:#c33;padding:1px 6px;border-radius:4px">⚠ STALE</b> ':"")+"Last updated "+(m<1?"just now":m+" min ago")+" ("+fmt(D.generated)+") · checks every 60s")}
 function render(){stamp();
- document.getElementById("lot").innerHTML=D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'"><div class="spr">'+sprite(COL[b.id],b.id)+'<div class="fx"><i></i><i></i><i></i></div><span class="zz">Z<small>z</small><small>z</small></span></div>'+
+ put(document.getElementById("lot"),D.bots.map(b=>'<button class="bay '+b.status+'" data-id="'+b.id+'"><div class="spr">'+sprite(COL[b.id],b.id)+'<div class="fx"><i></i><i></i><i></i></div><span class="zz">Z<small>z</small><small>z</small></span></div>'+
  '<span class="lv">Lv '+(b.boost==null?"?":1+Math.floor(b.boost/20))+'</span><div class="bubble">'+esc(b.task||"no data")+'</div><b>'+esc(b.name)+'</b> <span class="st '+b.status+'">'+(b.status==="working"?"WORKING":b.status==="idle"?"sleeping":"no data")+'</span><div class="lbl">'+esc(b.role)+'</div><div class="lbl">Last: '+ago(b.last)+'</div>'+
- bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join("");
- document.querySelectorAll(".bay").forEach(e=>{if(e.dataset.id===sel)e.classList.add("sel");e.onclick=()=>{sel=e.dataset.id;document.querySelectorAll(".bay").forEach(x=>x.classList.toggle("sel",x===e));showDetail()}});ticker();sky();document.body.classList.toggle("anywork",D.bots.some(b=>b.status==="working"));
+ bar(b.fuel,"#4c4","⚡ Energy")+bar(b.boost,"#4af","⭐ XP")+'</button>').join(""));
+ document.querySelectorAll(".bay").forEach(e=>e.classList.toggle("sel",e.dataset.id===sel));ticker();sky();document.body.classList.toggle("anywork",D.bots.some(b=>b.status==="working"));
  showDetail();renderJoint();renderNight()}
-function ticker(){const w=D.bots.flatMap(b=>b.wins.slice(0,3).map(x=>"★ "+b.name+": "+x.t));document.getElementById("tk").textContent=w.length?w.join("   "):"no data — no recent wins"}
-function sky(){const h=+new Date().toLocaleString("en-US",{timeZone:"America/New_York",hour:"numeric",hour12:false})%24;const sc=document.getElementById("scene");sc.className=(h>=20||h<6)?"night":(h>=18||h<8)?"dusk":"day";
- const st=document.getElementById("stars");if(!st.children.length)for(let i=0;i<40;i++){const e=document.createElement("i");e.style.left=Math.random()*100+"%";e.style.top=Math.random()*100+"%";e.style.animationDelay=Math.random()*3+"s";st.appendChild(e)}}
+function ticker(){const w=D.bots.flatMap(b=>b.wins.slice(0,3).map(x=>"★ "+b.name+": "+x.t)),el=document.getElementById("tk"),t=w.length?w.join("   "):"no data — no recent wins";if(el.textContent!==t)el.textContent=t}
+function sky(){const h=+new Date().toLocaleString("en-US",{timeZone:"America/New_York",hour:"numeric",hour12:false})%24;const sc=document.getElementById("scene");const c=(h>=20||h<6)?"night":(h>=18||h<8)?"dusk":"day";if(sc.className!==c)sc.className=c;
+ const st=document.getElementById("stars");if(!st.children.length){const G=6,sh=Array.from({length:G},()=>[]);for(let i=0;i<40;i++)sh[i%G].push((Math.random()*100).toFixed(2)+"vw "+(Math.random()*60).toFixed(2)+"vh 0 #fff");
+  sh.forEach((s,g)=>{const e=document.createElement("i");e.style.boxShadow=s.join(",");e.style.animationDelay=(g*3/G).toFixed(2)+"s";st.appendChild(e)})}}
 sky();
-function tickClock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-US",{timeZone:"America/New_York",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true})+" ET"}tickClock();setInterval(tickClock,1000);
-function showDetail(){const el=document.getElementById("detail");const b=D.bots.find(x=>x.id===(sel||D.bots[0].id));if(!sel&&innerWidth<1600){return}
- el.style.display="block";el.innerHTML='<h2 style="margin:0;color:'+COL[b.id]+'">'+esc(b.name)+'</h2><div class="lbl">'+esc(b.role)+'</div>'+
+const CLK=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+function tickClock(){document.getElementById("clock").textContent=CLK.format(new Date())+" ET"}tickClock();
+const T={};function every(n,f,ms){clearInterval(T[n]);T[n]=setInterval(f,ms)}function stopAll(){for(const n in T){clearInterval(T[n]);delete T[n]}}
+every("clock",tickClock,1000);let UNLOCKED=false;
+document.addEventListener("visibilitychange",()=>{if(document.hidden){stopAll();return}/* tab visible again: catch up, then resume */
+ tickClock();every("clock",tickClock,1000);if(UNLOCKED){stamp();if(Date.now()-LASTFETCH>=55000)load();every("poll",load,60000);every("stamp",stamp,15000)}});
+function showDetail(scroll){const el=document.getElementById("detail");const b=D.bots.find(x=>x.id===(sel||D.bots[0].id));if(!sel&&innerWidth<1600){return}
+ el.style.display="block";put(el,'<h2 style="margin:0;color:'+COL[b.id]+'">'+esc(b.name)+'</h2><div class="lbl">'+esc(b.role)+'</div>'+
  '<p><b>Current task:</b> '+esc(b.task||"no data")+'</p><p><b>Schedule / routines:</b> '+esc(b.schedule||"no data")+'</p>'+
  '<b>Recent wins (note headings, last 7 days):</b>'+(b.wins.length?'<ul>'+b.wins.map(w=>'<li>'+esc(w.t)+' <span class="lbl">('+fmt(w.at)+')</span></li>').join("")+'</ul>':'<p>no data</p>')+
- '<div class="lbl">Sources: '+(b.sources.length?esc(b.sources.join(", ")):"none found")+'</div>';if(sel&&innerWidth<1600)el.scrollIntoView({behavior:"smooth"})}
+ '<div class="lbl">Sources: '+(b.sources.length?esc(b.sources.join(", ")):"none found")+'</div>');if(scroll&&innerWidth<1600)el.scrollIntoView({behavior:"smooth"})}
 function renderJoint(){const j=D.joint,el=document.getElementById("joint");if(!el)return;
  const hd='<h2>🤝 Joint · BotLink</h2>';
- if(!j||j.state!=="ok"){el.innerHTML=hd+'<p class="jwait">⏳ Waiting for Sheet access…</p><div class="lbl">Shared task board with Dakota\'s side isn\'t publicly readable yet.</div>';return}
- el.innerHTML=hd+'<div class="lbl">'+j.items.length+' tasks · '+fmt(j.at)+'</div>'+(j.items.length?'<ul>'+j.items.map(t=>{const s=String(t.status||"").toLowerCase().split(/\s/)[0].replace(/[^a-z]/g,"");const l=/^https:\/\//.test(t["public link"]||"")?' <a href="'+esc(t["public link"])+'" target="_blank" rel="noopener noreferrer nofollow">↗</a>':"";
- return '<li title="'+esc([t.id,t.project,t.owner_side,t.updated,t.updated_by].filter(Boolean).join(" · "))+'"><span class="jst '+s+'">'+esc(t.status||"?")+'</span>'+esc(t.title||"(untitled)")+' <span class="lbl">'+esc(t.owner_side||"")+'</span>'+l+'</li>'}).join("")+'</ul>':'<p>no tasks</p>')}
-function renderNight(){const n=D.night,el=document.getElementById("night");
- el.innerHTML='<h2 style="margin:0">🌙 Night Shift</h2><div class="lbl">'+fmt(n.window[0])+' → '+fmt(n.window[1])+'</div>'+(n.items.length?'<ul>'+n.items.map(i=>'<li><b>'+esc(i.bot)+'</b> '+fmt(i.at)+': '+esc(i.what)+'</li>').join("")+'</ul>':'<p>no data — no overnight activity found</p>')}
+ if(!j||j.state!=="ok"){put(el,hd+'<p class="jwait">⏳ Waiting for Sheet access…</p><div class="lbl">Shared task board with Dakota\'s side isn\'t publicly readable yet.</div>');return}
+ put(el,hd+'<div class="lbl">'+j.items.length+' tasks · '+fmt(j.at)+'</div>'+(j.items.length?'<ul>'+j.items.map(t=>{const s=String(t.status||"").toLowerCase().split(/\s/)[0].replace(/[^a-z]/g,"");const l=/^https:\/\//.test(t["public link"]||"")?' <a href="'+esc(t["public link"])+'" target="_blank" rel="noopener noreferrer nofollow">↗</a>':"";
+ return '<li title="'+esc([t.id,t.project,t.owner_side,t.updated,t.updated_by].filter(Boolean).join(" · "))+'"><span class="jst '+s+'">'+esc(t.status||"?")+'</span>'+esc(t.title||"(untitled)")+' <span class="lbl">'+esc(t.owner_side||"")+'</span>'+l+'</li>'}).join("")+'</ul>':'<p>no tasks</p>'))}
+const NIGHTMAX=150;/* the overnight list can hold thousands of entries; only the first ones fit on screen */
+function renderNight(){const n=D.night,el=document.getElementById("night"),it=n.items.slice(0,NIGHTMAX),more=n.items.length-it.length;
+ put(el,'<h2 style="margin:0">🌙 Night Shift</h2><div class="lbl">'+fmt(n.window[0])+' → '+fmt(n.window[1])+'</div>'+(n.items.length?'<ul>'+it.map(i=>'<li><b>'+esc(i.bot)+'</b> '+fmt(i.at)+': '+esc(i.what)+'</li>').join("")+(more>0?'<li class="lbl">… and '+more+' more</li>':'')+'</ul>':'<p>no data — no overnight activity found</p>'))}
+document.getElementById("lot").addEventListener("click",ev=>{const e=ev.target.closest(".bay");if(!e)return;sel=e.dataset.id;document.querySelectorAll(".bay").forEach(x=>x.classList.toggle("sel",x===e));showDetail(true)});
 document.getElementById("nsBtn").onclick=()=>{const el=document.getElementById("night");el.style.display="block";el.scrollIntoView({behavior:"smooth"})};
-function unlock(){document.getElementById("gate").style.display="none";document.getElementById("app").style.display="block";if(/wall/.test(location.search+location.hash))document.body.classList.add("wall");load();setInterval(load,60000);setInterval(stamp,15000);setTimeout(()=>location.reload(),6*3600e3)}
-document.getElementById("go").onclick=async()=>{const err=document.getElementById("err");err.textContent="Checking…";try{const E=await fetchEnc();const k=await derive(document.getElementById("pc").value,E);D=await decrypt(E,k);KEY={k,salt:E.salt};if(document.getElementById("rem").checked)await kput(KEY);err.textContent="";unlock()}catch(e){err.textContent="Wrong passcode"}};
+function unlock(){if(UNLOCKED)return;UNLOCKED=true;document.getElementById("gate").style.display="none";document.getElementById("app").style.display="block";if(/wall/.test(location.search+location.hash))document.body.classList.add("wall");if(D)render();load();
+ if(!document.hidden){every("poll",load,60000);every("stamp",stamp,15000)}setTimeout(()=>location.reload(),6*3600e3)}
+document.getElementById("go").onclick=async()=>{const err=document.getElementById("err");err.textContent="Checking…";try{const E=await fetchEnc();const k=await derive(document.getElementById("pc").value,E);D=await decrypt(E,k);LASTCT=E.ct;KEY={k,salt:E.salt};if(document.getElementById("rem").checked)await kput(KEY);err.textContent="";unlock()}catch(e){err.textContent="Wrong passcode"}};
 document.getElementById("pc").onkeydown=e=>{if(e.key==="Enter")document.getElementById("go").click()};
 document.getElementById("lock").onclick=async()=>{await kput(null);location.reload()};
 document.getElementById("wallBtn").onclick=()=>{document.body.classList.toggle("wall");document.documentElement.requestFullscreen?.().catch(()=>{})};
@@ -196,11 +208,11 @@ kget().then(v=>{if(v&&v.k){KEY=v;unlock()}}).catch(()=>{});
 </style><style>
 #carwrap{position:relative;width:60%;max-width:300px;line-height:0}
 #car{width:100%!important;max-width:none!important;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #0007)}
-.shinefx{position:absolute;inset:0;-webkit-mask-size:100% 100%;mask-size:100% 100%;background:linear-gradient(100deg,transparent 40%,#fff6 50%,transparent 60%) 0 0/300% 100%;animation:shine2 7s ease-in-out infinite;pointer-events:none}
-@keyframes shine2{0%{background-position:100% 0}60%,100%{background-position:-50% 0}}
+.shinefx{position:absolute;inset:0;-webkit-mask-size:100% 100%;mask-size:100% 100%;overflow:hidden;pointer-events:none}.shinefx:before{content:"";position:absolute;top:0;bottom:0;left:0;width:300%;background:linear-gradient(100deg,transparent 40%,#fff6 50%,transparent 60%);animation:shine2 7s ease-in-out infinite;will-change:transform}
+@keyframes shine2{0%{transform:translateX(-66.6667%)}60%,100%{transform:translateX(33.3333%)}}
 .puff{position:absolute;right:-4%;bottom:14%;width:6%;height:20%}.puff b{position:absolute;width:40%;height:40%;background:#ccd;opacity:0}
 .puff b:nth-child(2){animation-delay:1.4s!important}
 body.anywork .puff b{animation:puff 2.8s ease-out infinite}
 @media (min-width:1600px){#carwrap{width:600px;max-width:none}}
-@media (prefers-reduced-motion:reduce){.shinefx,.puff b{animation:none!important}.shinefx{display:none}}
+@media (prefers-reduced-motion:reduce){.shinefx,.shinefx:before,.puff b{animation:none!important}.shinefx{display:none}}
 </style>
